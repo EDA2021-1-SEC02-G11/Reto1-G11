@@ -37,9 +37,44 @@ los mismos.
 
 # Construccion de modelos
 
+def newCatalog():
+    """
+    Inicializa el catálogo de videos. Crea una lista vacia para guardar
+    todos los videos, adicionalmente, crea una lista vacia para las categorias. 
+    Retorna el catalogo inicializado.
+    """
+    catalog = {'videos': None,
+               'categorias': None,}
+
+    catalog["videos"] = lt.newList()
+    catalog["categorias"] = lt.newList()
+
+    return catalog
+
 # Funciones para agregar informacion al catalogo
 
+def addVideo(catalog, video):
+    lt.addLast(catalog["videos"], video)
+
+
+def addCategoria(catalog, categoria):
+    """
+    Adiciona una categoría a su respectiva lista
+    """
+    tag = newCategoria(categoria["name"], categoria["id"])
+    lt.addLast(catalog["categorias"], tag)
+
+
 # Funciones para creacion de datos
+
+def newCategoria(name, id):
+    """
+    Esta estructura almacena las categorías de sus respectivos videos.
+    """
+    categoria = {"name": "", "id": ""}
+    categoria["name"] = name
+    categoria["id"] = id
+    return categoria
 
 # Funciones de consulta
 
