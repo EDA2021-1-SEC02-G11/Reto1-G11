@@ -1,4 +1,4 @@
-"""
+﻿"""
  * Copyright 2020, Departamento de sistemas y Computación,
  * Universidad de Los Andes
  *
@@ -118,7 +118,6 @@ def sortVideos(catalog, size, tipo):
         start_time = time.process_time()
         sorted_list = qcks.sort(sub_list, cmpVideosbyViews)
         stop_time = time.process_time()
-    a=sorted_list
 
     Tiempo_total = (stop_time-start_time)*1000
-    return Tiempo_total
+    return Tiempo_total, sorted_list

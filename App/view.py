@@ -1,4 +1,4 @@
-"""
+﻿"""
  * Copyright 2020, Departamento de sistemas y Computación, Universidad
  * de Los Andes
  *
@@ -89,7 +89,7 @@ while True:
         tipo = input(" Seleccione el tipo de algoritmo de ordenamiento"+
             "iterativo escribiendo textualmente alguna de estas opciones:"+
             "Insertion, Selection, Shell, Merge, Quick: ")
-        printResults(controller.sortVideos(catalog,int(size),tipo)[1], int(size))
+        printResults(controller.sortVideos(catalog,int(size),tipo)[1],int(size))
         print(controller.sortVideos(catalog,int(size),tipo)[0])
         
     elif int(inputs[0]) == 3:
