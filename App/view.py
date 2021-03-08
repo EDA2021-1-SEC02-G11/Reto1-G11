@@ -57,16 +57,19 @@ def loadData(catalog):
     """
     controller.loadData(catalog)
 
-def printResults(lista,tamaño):
+def printResults(info,tamaño):
+    lista=info[1]
     size = lt.size(lista)
     if size >= tamaño:
         print("Los primeros ", tamaño, " videos ordenados son:")
-        i=0
+        i=1
         while i <= tamaño:
             video = lt.getElement(lista,i)
-            print(' Nombre: ' + video['title'] + ' Canal: ' +
-                  video['channel_title'] + ' ID Categoria: ' + video['category_id'] + "Pais: "+ video["country"])
+            print(' Fecha Trending: ' + video['trending_date'] + "," + ' Nombre: ' +
+                  video['title'] + ","+ ' Canal: ' + video['channel_title'] + ","+ " Fecha de Publicacion: "+ video["publish_time"] +
+                  "," + " Visitas: " + video["views"]+ ","+ " Likes: "+ video["likes"]+ "," + " Dislikes: " +video["dislikes"])
             i+=1
+    print(info[0])
 
 
 
@@ -85,12 +88,19 @@ while True:
         print('Videos cargados: ' + str(lt.size(catalog['videos'])))
         print('Categorias cargadas: ' + str(lt.size(catalog['categorias'])))
     elif int(inputs[0]) == 2:
-        size = input("Tamaño límite de videos a listar:")
+        size = int(input("Tamaño límite de videos a ordenar:"))
+        sample=int(input("Tamaño de la muestra a imprimir: "))
+        country=input("Escoja el pais del cual quiere buscar videos: ")
+        category=input("Escriba la categoria por la cual quiere buscar: ")
         tipo = input(" Seleccione el tipo de algoritmo de ordenamiento"+
             "iterativo escribiendo textualmente alguna de estas opciones:"+
             "Insertion, Selection, Shell, Merge, Quick: ")
-        printResults(controller.sortVideos(catalog,int(size),tipo)[1],int(size))
-        print(controller.sortVideos(catalog,int(size),tipo)[0])
+        #printResults(controller.sortVideos(catalog,size,tipo),sample)
+        sorted_list=controller.sameCountryCategory(catalog,country,category)
+        try:
+            printResults(controller.sortVideos(sorted_list,size,tipo),sample)
+        except TypeError:
+            print("No hay suficientes videos de este tipo y categoria, intente ordenar una cantidad menor.")
         
     elif int(inputs[0]) == 3:
         pass

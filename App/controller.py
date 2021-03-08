@@ -1,4 +1,4 @@
-"""
+﻿"""
  * Copyright 2020, Departamento de sistemas y Computación,
  * Universidad de Los Andes
  *
@@ -52,14 +52,20 @@ def loadCategoria(catalog):
 
 def loadVideos(catalog):
     
-    videosfile = cf.data_dir + "videos-50pct.csv"
+    videosfile = cf.data_dir + "videos-large.csv"
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     for video in input_file:
         model.addVideo(catalog, video)
 
 # Funciones de ordenamiento
 
+def sameCountryCategory(lista,country,category):
+    return model.sameCountryCategory(lista,country,category)
+
 def sortVideos(catalog, size, tipo):
     return model.sortVideos(catalog, size, tipo)
 
 # Funciones de consulta sobre el catálogo
+
+def nameToIdCategory(category_name,categories):
+    return model.nameToIdCategory(category_name,categories)

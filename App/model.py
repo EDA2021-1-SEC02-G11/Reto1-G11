@@ -84,40 +84,64 @@ def newCategoria(name, id):
 
 # Funciones de consulta
 
+def nameToIdCategory(category_name,categories):
+    for i in range(1,lt.size(categories)+1):
+        category=lt.getElement(categories,i)
+        if category_name==category["name"]:
+            return category["id"]
+    return None
+
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def cmpVideosbyViews(video1,video2):
-    return ((video1["views"]) < (video2["views"]))
+    return (int(video1["views"]) > (int(video2["views"])))
 # Funciones de ordenamiento
 
+def sameCountryCategory(info,country,category):
+    lista=info["videos"]
+    categories=info["categorias"]
+    country_vids=newCatalog("ARRAY_LIST")
+    for i in range(1,lt.size(lista)+1):
+        video=lt.getElement(lista,i)
+        if video["country"]==country:
+            if video["category_id"]==nameToIdCategory(category,categories):
+                addVideo(country_vids,video)
+    return country_vids
+
 def sortVideos(catalog, size, tipo):
-    sub_list = lt.subList(catalog["videos"],1,size)
-    sub_list = sub_list.copy()
+    try:
+        sub_list = lt.subList(catalog["videos"],1,size)
+        sub_list = sub_list.copy()
+        if tipo == "Insertion":
+            start_time = time.process_time()
+            sorted_list = ints.sort(sub_list, cmpVideosbyViews)
+            stop_time = time.process_time()
 
-    if tipo == "Insertion":
-        start_time = time.process_time()
-        sorted_list = ints.sort(sub_list, cmpVideosbyViews)
-        stop_time = time.process_time()
+        elif tipo == "Selection":
+            start_time = time.process_time()
+            sorted_list = sets.sort(sub_list, cmpVideosbyViews)
+            stop_time = time.process_time()
 
-    elif tipo == "Selection":
-        start_time = time.process_time()
-        sorted_list = sets.sort(sub_list, cmpVideosbyViews)
-        stop_time = time.process_time()
-
-    elif tipo == "Shell":
-        start_time = time.process_time()
-        sorted_list = shls.sort(sub_list, cmpVideosbyViews)
-        stop_time = time.process_time()
+        elif tipo == "Shell":
+            start_time = time.process_time()
+            sorted_list = shls.sort(sub_list, cmpVideosbyViews)
+            stop_time = time.process_time()
     
-    elif tipo == "Merge":
-        start_time = time.process_time()
-        sorted_list = mrgs.sort(sub_list, cmpVideosbyViews)
-        stop_time = time.process_time()
+        elif tipo == "Merge":
+            start_time = time.process_time()
+            sorted_list = mrgs.sort(sub_list, cmpVideosbyViews)
+            stop_time = time.process_time()
 
-    elif tipo == "Quick":
-        start_time = time.process_time()
-        sorted_list = qcks.sort(sub_list, cmpVideosbyViews)
-        stop_time = time.process_time()
+        elif tipo == "Quick":
+            start_time = time.process_time()
+            sorted_list = qcks.sort(sub_list, cmpVideosbyViews)
+            stop_time = time.process_time()
 
-    Tiempo_total = (stop_time-start_time)*1000
-    return Tiempo_total, sorted_list
+        Tiempo_total = (stop_time-start_time)*1000
+        return Tiempo_total, sorted_list
+
+    except IndexError:
+        pass
+
+    
