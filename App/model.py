@@ -60,7 +60,8 @@ def newCatalog(tipo):
 # Funciones para agregar informacion al catalogo
 
 def addVideo(catalog, video):
-    lt.addLast(catalog["videos"], video)
+    if not (video["video_id"]=="#NAME?"):
+        lt.addLast(catalog["videos"], video)
 
 
 def addCategoria(catalog, categoria):
@@ -91,12 +92,89 @@ def nameToIdCategory(category_name,categories):
             return category["id"]
     return None
 
+def mostTrending(sorted_list):
+    #sorted_list=catalog["videos"]
+    most=0
+    most_vid=None
+    current=1
+    for i in range(1,lt.size(sorted_list)+1):
+        current_vid=lt.getElement(sorted_list,i)
+        if current_vid==lt.lastElement(sorted_list):
+            next_vid=lt.getElement(sorted_list,i-1)
+        else:
+            next_vid=lt.getElement(sorted_list,i+1)
+        if str(current_vid["title"])==str(next_vid["title"]):
+            current+=1
+        else:
+            current=1
+        if current>most:
+            most=current
+            most_vid=current_vid
+        
+    return (most_vid,most)
+
+
+
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def cmpVideosbyViews(video1,video2):
     return (int(video1["views"]) > (int(video2["views"])))
+
+def cmpVideosbyName(video1,video2):
+    return (str(video1["title"]).lower()>str(video2["title"]).lower())
 # Funciones de ordenamiento
+
+
+def sortVideosName(catalog,size,tipo):
+    sub_list = lt.subList(catalog["videos"],1,size)
+    sub_list = sub_list.copy()
+    if tipo == "Insertion":
+        start_time = time.process_time()
+        sorted_list = ints.sort(sub_list, cmpVideosbyName)
+        stop_time = time.process_time()
+
+    elif tipo == "Selection":
+        start_time = time.process_time()
+        sorted_list = sets.sort(sub_list, cmpVideosbyName)
+        stop_time = time.process_time()
+
+    elif tipo == "Shell":
+        start_time = time.process_time()
+        sorted_list = shls.sort(sub_list, cmpVideosbyName)
+        stop_time = time.process_time()
+    
+    elif tipo == "Merge":
+        start_time = time.process_time()
+        sorted_list = mrgs.sort(sub_list, cmpVideosbyName)
+        stop_time = time.process_time()
+
+    elif tipo == "Quick":
+        start_time = time.process_time()
+        sorted_list = qcks.sort(sub_list, cmpVideosbyName)
+        stop_time = time.process_time()
+
+    Tiempo_total = (stop_time-start_time)*1000
+    return sorted_list
+
+
+def categoryTrending(info,category):
+    lista=info["videos"]
+    categories=info["categorias"]
+    category_vids=newCatalog("ARRAY_LIST")
+    for i in range(1,lt.size(lista)+1):
+        video=lt.getElement(lista,i)
+        if video["category_id"]==nameToIdCategory(category,categories):
+            addVideo(category_vids,video)
+    sortedvids=sortVideosName(category_vids,lt.size(category_vids["videos"]),"Merge")
+    most_trending=mostTrending(sortedvids)
+    return most_trending
+    
+
+        
+
+
 
 def sameCountryCategory(info,country,category):
     lista=info["videos"]
@@ -108,6 +186,7 @@ def sameCountryCategory(info,country,category):
             if video["category_id"]==nameToIdCategory(category,categories):
                 addVideo(country_vids,video)
     return country_vids
+
 
 def sortVideos(catalog, size, tipo):
     try:
@@ -143,5 +222,6 @@ def sortVideos(catalog, size, tipo):
 
     except IndexError:
         pass
+
 
     

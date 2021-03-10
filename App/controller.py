@@ -65,6 +65,9 @@ def sameCountryCategory(lista,country,category):
 def sortVideos(catalog, size, tipo):
     return model.sortVideos(catalog, size, tipo)
 
+def categoryTrending(info,category):
+    return model.categoryTrending(info,category)
+
 # Funciones de consulta sobre el catálogo
 
 def nameToIdCategory(category_name,categories):

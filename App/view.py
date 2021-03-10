@@ -57,7 +57,7 @@ def loadData(catalog):
     """
     controller.loadData(catalog)
 
-def printResults(info,tamaño):
+def printResultsReq_1(info,tamaño):
     lista=info[1]
     size = lt.size(lista)
     if size >= tamaño:
@@ -70,6 +70,12 @@ def printResults(info,tamaño):
                   "," + " Visitas: " + video["views"]+ ","+ " Likes: "+ video["likes"]+ "," + " Dislikes: " +video["dislikes"])
             i+=1
     print(info[0])
+
+def printResultsReq_3(info):
+    video=info[0]
+    days=str(info[1])
+    print("El video que mas dias ha sido trending es: ")
+    print("Nombre: " + video["title"] + "," + "Canal: " + video["channel_title"] + ","+ "Categoria_ID: " + video["category_id"] + ","+ "Dias: " + days)
 
 
 
@@ -95,17 +101,17 @@ while True:
         tipo = input(" Seleccione el tipo de algoritmo de ordenamiento"+
             "iterativo escribiendo textualmente alguna de estas opciones:"+
             "Insertion, Selection, Shell, Merge, Quick: ")
-        #printResults(controller.sortVideos(catalog,size,tipo),sample)
         sorted_list=controller.sameCountryCategory(catalog,country,category)
         try:
-            printResults(controller.sortVideos(sorted_list,size,tipo),sample)
+            printResultsReq_1(controller.sortVideos(sorted_list,size,tipo),sample)
         except TypeError:
             print("No hay suficientes videos de este tipo y categoria, intente ordenar una cantidad menor.")
         
     elif int(inputs[0]) == 3:
         pass
     elif int(inputs[0]) == 4:
-        pass
+        category=input("Escriba la categoria la cual quiere buscar: ")
+        printResultsReq_3(controller.categoryTrending(catalog,category))
     elif int(inputs[0]) == 5:
         pass
 
