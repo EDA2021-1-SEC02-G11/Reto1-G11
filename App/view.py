@@ -24,6 +24,7 @@ import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
+from DISClib.DataStructures import listiterator as it
 assert cf
 
 
@@ -88,7 +89,7 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
-        tipo = input("seleccione el tipo de estrcutura de datos escribiendo textualmente: ARRAY_LIST o SINGLE_LINKED: ")
+        tipo = input("seleccione el tipo de estructura de datos escribiendo textualmente: ARRAY_LIST o SINGLE_LINKED: ")
         catalog = initCatalog(tipo)
         loadData(catalog)
         print('Videos cargados: ' + str(lt.size(catalog['videos'])))
@@ -96,8 +97,8 @@ while True:
     elif int(inputs[0]) == 2:
         size = int(input("Tamaño límite de videos a ordenar:"))
         sample=int(input("Tamaño de la muestra a imprimir: "))
-        country=input("Escoja el pais del cual quiere buscar videos: ")
-        category=input("Escriba la categoria por la cual quiere buscar: ")
+        country=input("Escoja el pais: ")
+        category=input("Escriba la categoria: ")
         tipo = input(" Seleccione el tipo de algoritmo de ordenamiento"+
             "iterativo escribiendo textualmente alguna de estas opciones:"+
             "Insertion, Selection, Shell, Merge, Quick: ")
@@ -108,12 +109,23 @@ while True:
             print("No hay suficientes videos de este tipo y categoria, intente ordenar una cantidad menor.")
         
     elif int(inputs[0]) == 3:
-        pass
+        country=input("Escriba el país a buscar:")
+        rta=controller.llamar_Trending(catalog,country)
+        iterador= it.newIterator(rta)
+        element=it.next(iterador)
+        print(("Title: {} , Channel_title:{} , Country: {} , Numero dias: {}").format(element['title'], element['channel_title'], element['country'], element['trending_date']))
     elif int(inputs[0]) == 4:
         category=input("Escriba la categoria la cual quiere buscar: ")
         printResultsReq_3(controller.categoryTrending(catalog,category))
     elif int(inputs[0]) == 5:
-        pass
+        country = str(input("Ingrese país: "))
+        videos_num = int(input("Ingrese cantidad: "))
+        tag = str(input("Ingrese tag (año): "))
+        lst = controller.videos_mas_likes(catalog,country,videos_num,tag)
+        for video in lt.iterator(lst):
+            print("video: " +str(video["title"])+", "+str(video["cannel_title"])+", "+str(video["publish_time"])+
+                    ", views: "+str(video["views"])+", likes: " +str(video["likes"])+", dislikes: "+str(video["dislikes"])+
+                    ", tags: "+str(video["tags"]))
 
     else:
         sys.exit(0)
