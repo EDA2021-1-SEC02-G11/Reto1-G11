@@ -223,5 +223,3 @@ def sortVideos(catalog, size, tipo):
     except IndexError:
         pass
 
-
-    
