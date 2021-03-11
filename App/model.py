@@ -44,17 +44,15 @@ los mismos.
 # Construccion de modelos
 
 def newCatalog(tipo):
-    """
-    Inicializa el catálogo de videos. Crea una lista vacia para guardar
-    todos los videos, adicionalmente, crea una lista vacia para las categorias. 
-    Retorna el catalogo inicializado.
-    """
+
     catalog = {'videos': None,
-               'categorias': None,}
+                'categorias': None}
 
-    catalog["videos"] = lt.newList(datastructure=tipo)
-    catalog["categorias"] = lt.newList(datastructure=tipo)
-
+    catalog["country"] = {}
+    catalog['videos'] = lt.newList(datastructure=tipo,
+                                   cmpfunction=cmpVideosbyViews)
+    catalog['categorias'] = lt.newList(datastructure=tipo,
+                                    cmpfunction=cmpcategory_id)
     return catalog
 
 # Funciones para agregar informacion al catalogo
@@ -70,6 +68,17 @@ def addCategoria(catalog, categoria):
     """
     tag = newCategoria(categoria["name"], categoria["id"])
     lt.addLast(catalog["categorias"], tag)
+
+def addCountry(catalog, video):
+    """
+    Adiciona un país a su respectiva lista
+    """
+    country = video["country"]
+    if country in (catalog["country"]):
+        lt.addLast(catalog["country"][country],video)
+    else:
+        catalog["country"][country] = lt.newList("ARRAY_LIST",cmpfunction=None)
+        lt.addLast(catalog["country"][country],video)
 
 
 # Funciones para creacion de datos
@@ -92,7 +101,7 @@ def nameToIdCategory(category_name,categories):
             return category["id"]
     return None
 
-def mostTrending(sorted_list):
+def mostTrending(sorted_list):  
     #sorted_list=catalog["videos"]
     most=0
     most_vid=None
@@ -124,6 +133,19 @@ def cmpVideosbyViews(video1,video2):
 
 def cmpVideosbyName(video1,video2):
     return (str(video1["title"]).lower()>str(video2["title"]).lower())
+
+def cmpTrending(video1, video2):
+    return(int(video1["trending_date"])>int(video2["trending_date"]))
+
+def cmpVideosbyLikes(video1,video2):
+    if video1['likes'] > video2['likes']:
+        return True
+    else:
+        return False
+
+def cmpcategory_id(name, category_id):
+    return (name == category_id['name'])
+
 # Funciones de ordenamiento
 
 
@@ -171,11 +193,6 @@ def categoryTrending(info,category):
     most_trending=mostTrending(sortedvids)
     return most_trending
     
-
-        
-
-
-
 def sameCountryCategory(info,country,category):
     lista=info["videos"]
     categories=info["categorias"]
@@ -187,6 +204,10 @@ def sameCountryCategory(info,country,category):
                 addVideo(country_vids,video)
     return country_vids
 
+def Trending(catalog,country):
+    if (country in catalog["country"]):
+        sort1 = mrgs.sort(catalog["country"][country],cmpTrending)
+        return sort1
 
 def sortVideos(catalog, size, tipo):
     try:
@@ -223,3 +244,12 @@ def sortVideos(catalog, size, tipo):
     except IndexError:
         pass
 
+def videos_mas_likes(catalog,country,cant_videos,tag):
+    tipo= "ARRAY_LIST"
+    videos = catalog["videos"]
+    sub_list = lt.newList(datastructure="ARRAY_LIST")
+    for video in lt.iterator(videos):
+        if (tag in video["tags"]) and (video["country"] == country):
+            lt.addLast(sub_list,video)
+    srt_lst = sortVideos(sub_list,cmpVideosbyLikes,tipo)
+    return lt.subList(srt_lst,1,cant_videos)
