@@ -41,6 +41,7 @@ def loadData(catalog):
 
     loadVideos(catalog)
     loadCategoria(catalog)
+    loadCountrys(catalog)
 
 def loadCategoria(catalog):
 
@@ -52,11 +53,17 @@ def loadCategoria(catalog):
 
 def loadVideos(catalog):
     
-    videosfile = cf.data_dir + "videos-large.csv"
+    videosfile = cf.data_dir + "videos-small.csv"
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     for video in input_file:
         model.addVideo(catalog, video)
 
+def loadCountrys(catalog):
+    
+    videosfile = cf.data_dir + "videos-small.csv"
+    input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
+    for video in input_file:
+        model.addCountry(catalog, video)
 # Funciones de ordenamiento
 
 def sameCountryCategory(lista,country,category):
@@ -72,3 +79,9 @@ def categoryTrending(info,category):
 
 def nameToIdCategory(category_name,categories):
     return model.nameToIdCategory(category_name,categories)
+
+def llamar_Trending(catalog,country):
+    return model.Trending(catalog,country)
+
+def videos_mas_likes(catalog,country,cant_videos,tag):
+    return model.videos_mas_likes(catalog,country,cant_videos,tag)
